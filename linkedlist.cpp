@@ -27,6 +27,7 @@ class LinkedList
         int headDelete();
         int tailDelete();
         void searchNode(int data);
+        bool isEmpty();
         void print();
 
     LinkedList()
@@ -97,8 +98,8 @@ int LinkedList::tailDelete()
         return NULL;
     }
 
-    Node *temp = new Node();
-    temp = tail;
+    Node *temp = tail;
+
     int temp_data = temp->data;
 
     if (head == tail)
@@ -107,9 +108,7 @@ int LinkedList::tailDelete()
     }
     else
     {
-        Node *n = new Node();
-        n = head;
-
+        Node *n = head;
         while(n->next != tail)
         {   
             n = n->next;
@@ -120,8 +119,7 @@ int LinkedList::tailDelete()
     }
 
     delete temp;   
-    delete n;
-    
+
     return temp_data;
 }
 
@@ -139,6 +137,11 @@ void LinkedList::print()
     delete node;
 }
 
+bool LinkedList::isEmpty()
+{
+    return (head==NULL);
+}
+
 int main()
 {
     LinkedList *list = new LinkedList();
@@ -147,15 +150,16 @@ int main()
     list->headInsert(3);
     list->headInsert(4);
     list->headInsert(5);
-    // list->print();
-    // list->headDelete();
-    // list->headDelete();
+    list->print();
+    printf("%d", list->isEmpty());
+    list->headDelete();
+    list->headDelete();
     list->print();
     list->tailDelete();
     list->tailDelete();
-    list->tailDelete();
-    list->tailDelete();
-    list->tailDelete();
-
+    printf("%d", list->isEmpty());
     list->print();
+    list->tailDelete();
+    list->print();
+    printf("%d", list->isEmpty());
 }
