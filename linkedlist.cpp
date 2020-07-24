@@ -33,6 +33,10 @@ class LinkedList
         bool isEmpty();
         void removeDups();
         void removeDupsBuffer();
+        void deleteMiddleNode();
+        Node * findKthToLast(Node *n, int k, int &count);
+        Node * findKthToLast(int k);
+        int length();
         void print();
 
     LinkedList()
@@ -195,7 +199,62 @@ void LinkedList::removeDupsBuffer()
     }
 }
 
+Node * LinkedList::findKthToLastIter(int k)
+{
+    
+}
+Node * LinkedList::findKthToLast(Node *n, int k, int &count)
+{   
+    // base case
+    if (n == NULL)
+    {
+        return NULL;
+    }
 
+    Node *nd = findKthToLast(n->next, k, count);
+    count++;
+
+    if (count == k)
+    {
+        return n;
+    }
+
+    return nd;
+}
+
+Node * LinkedList::findKthToLast(int k)
+{
+    int count = 0;
+
+    return findKthToLast(head, k, count);
+}
+
+void LinkedList::deleteMiddleNode()
+{
+    Node *curr = head;
+    Node *n = head->next;
+    while (curr->next != n)
+    {
+        curr = curr->next;
+    }
+
+    curr->next = n->next;
+    delete n;
+}
+
+int LinkedList::length()
+{
+    Node *n = head;
+    int length = 0;
+
+    while (n != NULL)
+    {
+        n = n->next;
+        length++;
+    }
+
+    return length;
+}
 
 bool LinkedList::isEmpty()
 {
@@ -205,27 +264,31 @@ bool LinkedList::isEmpty()
 int main()
 {
     LinkedList *list = new LinkedList();
+    list->tailInsert(1);
     list->tailInsert(2);
-    list->tailInsert(4);
-    list->tailInsert(2);
-    list->tailInsert(4);
     list->tailInsert(3);
-    list->print();
-    list->removeDupsBuffer();
-    list->print();
-    printf("NO BUFFER SOLUTION!");
-    while(list->isEmpty() == 0)
-    {
-        list->headDelete();
-    }
-    list->tailInsert(2);
     list->tailInsert(4);
-    list->tailInsert(2);
-    list->tailInsert(4);
-    list->tailInsert(3);
+    list->tailInsert(5);
     list->print();
-    list->removeDups();
-    list->print();
+    printf("Length of list: %d\n", list->length());
+    printf("Found kth to last %d\n", list->findKthToLast(2)->data);
+    // list->removeDupsBuffer();
+    // list->print();
+    // printf("NO BUFFER SOLUTION!");
+    // while(list->isEmpty() == 0)
+    // {
+    //     list->headDelete();
+    // }
+    // list->tailInsert(2);
+    // list->tailInsert(4);
+    // list->tailInsert(2);
+    // list->tailInsert(4);
+    // list->tailInsert(3);
+    // list->print();
+    // list->removeDups();
+    // list->print();
+
+
     // printf("%d\n", list->isEmpty());
     // list->headDelete();
     // list->headDelete();
