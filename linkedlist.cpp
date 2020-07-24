@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unordered_set>
 using namespace std;
+
 class Node
 {
     public:
@@ -18,21 +20,30 @@ class Node
 
 class LinkedList
 {
-    public:
+    private:
         Node *head = NULL;
         Node *tail = NULL;
 
+    public:
         void headInsert(int data);
         void tailInsert(int data);
         int headDelete();
         int tailDelete();
         void searchNode(int data);
         bool isEmpty();
+        void removeDups();
+        void removeDupsBuffer();
         void print();
 
     LinkedList()
     {
         printf("Initializing linked list\n");
+    }
+
+    ~LinkedList()
+    {
+        delete head;
+        delete tail;
     }
 };
 
@@ -137,6 +148,55 @@ void LinkedList::print()
     delete node;
 }
 
+void LinkedList::removeDups()
+{
+    Node *curr = head;
+
+    while (curr != NULL)
+    {
+        Node *runner = curr;
+        while (runner->next != NULL)
+        {
+            if (curr->data == runner->next->data)
+            {
+                runner->next = runner->next->next;
+            }
+            else
+            {
+                runner = runner->next;
+            }
+        }
+        
+        curr = curr->next;
+
+    }
+}
+
+
+void LinkedList::removeDupsBuffer()
+{
+    unordered_set<int> dupsSet;
+
+    Node *prev = NULL;
+    Node *curr = head;
+
+    while (curr != NULL)
+    {
+        if (dupsSet.find(curr->data) != dupsSet.end())
+        {
+            prev->next = curr->next;
+        }
+        else
+        {
+            dupsSet.insert(curr->data);
+            prev = curr;
+        }
+        curr = curr->next;
+    }
+}
+
+
+
 bool LinkedList::isEmpty()
 {
     return (head==NULL);
@@ -145,21 +205,37 @@ bool LinkedList::isEmpty()
 int main()
 {
     LinkedList *list = new LinkedList();
-    list->tailInsert(1);
     list->tailInsert(2);
-    list->headInsert(3);
-    list->headInsert(4);
-    list->headInsert(5);
+    list->tailInsert(4);
+    list->tailInsert(2);
+    list->tailInsert(4);
+    list->tailInsert(3);
     list->print();
-    printf("%d", list->isEmpty());
-    list->headDelete();
-    list->headDelete();
+    list->removeDupsBuffer();
     list->print();
-    list->tailDelete();
-    list->tailDelete();
-    printf("%d", list->isEmpty());
+    printf("NO BUFFER SOLUTION!");
+    while(list->isEmpty() == 0)
+    {
+        list->headDelete();
+    }
+    list->tailInsert(2);
+    list->tailInsert(4);
+    list->tailInsert(2);
+    list->tailInsert(4);
+    list->tailInsert(3);
     list->print();
-    list->tailDelete();
+    list->removeDups();
     list->print();
-    printf("%d", list->isEmpty());
+    // printf("%d\n", list->isEmpty());
+    // list->headDelete();
+    // list->headDelete();
+    // list->print();
+    // list->tailDelete();
+    // list->tailDelete();
+    // printf("%d\n", list->isEmpty());
+    // list->print();
+    // list->tailDelete();
+    // list->print();
+    // printf("%d\n", list->isEmpty());
+    // delete list;
 }
