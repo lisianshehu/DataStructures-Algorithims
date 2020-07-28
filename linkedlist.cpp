@@ -38,6 +38,7 @@ class LinkedList
         Node * findKthToLast(int k);
         int length();
         void print();
+        bool isPalindrome();
 
     LinkedList()
     {
@@ -124,6 +125,8 @@ int LinkedList::tailDelete()
     else
     {
         Node *n = head;
+        head = head->next;
+
         while(n->next != tail)
         {   
             n = n->next;
@@ -132,7 +135,6 @@ int LinkedList::tailDelete()
         tail = n;
         tail->next = NULL;
     }
-
     delete temp;   
 
     return temp_data;
@@ -147,7 +149,7 @@ void LinkedList::print()
         printf("%d->", node->data);
         node = node->next;
     }
-    printf("Null\n");
+    printf("%d\n", node);
     
     delete node;
 }
@@ -172,7 +174,6 @@ void LinkedList::removeDups()
         }
         
         curr = curr->next;
-
     }
 }
 
@@ -199,10 +200,11 @@ void LinkedList::removeDupsBuffer()
     }
 }
 
-Node * LinkedList::findKthToLastIter(int k)
-{
+// Node * LinkedList::findKthToLastIter(int k)
+// {
     
-}
+// }
+
 Node * LinkedList::findKthToLast(Node *n, int k, int &count)
 {   
     // base case
@@ -256,6 +258,53 @@ int LinkedList::length()
     return length;
 }
 
+bool LinkedList::isPalindrome()
+{
+    Node *middle = head;
+    Node *fast = head;
+    
+    // Get to the middle of the list
+    while (middle && fast && fast->next)
+    {
+        middle = middle->next;
+        fast = fast->next->next;
+    }
+
+    delete fast;
+
+    // Reverse second half of list
+    Node *prev = NULL;
+
+    while (middle != NULL)
+    {
+        Node *temp = middle->next;
+        middle->next = prev;
+        prev = middle;
+        middle = temp;
+    }
+
+    delete middle;
+
+    // compare two halves to each other
+    Node *n = head;
+
+    while (prev != NULL)
+    {
+        if (n->data != prev->data)
+        {
+            return false;
+        }
+        prev = prev->next;
+        n = n->next;
+
+    } 
+
+    delete n;
+    delete prev;
+
+    return true;
+}
+
 bool LinkedList::isEmpty()
 {
     return (head==NULL);
@@ -265,13 +314,15 @@ int main()
 {
     LinkedList *list = new LinkedList();
     list->tailInsert(1);
-    list->tailInsert(2);
     list->tailInsert(3);
     list->tailInsert(4);
     list->tailInsert(5);
+    list->tailInsert(6);
     list->print();
     printf("Length of list: %d\n", list->length());
-    printf("Found kth to last %d\n", list->findKthToLast(2)->data);
+    printf("Found kth to last: %d\n", list->findKthToLast(2)->data);
+    // printf("Is palindrome: %d\n", list->isPalindrome());
+    list->print();
     // list->removeDupsBuffer();
     // list->print();
     // printf("NO BUFFER SOLUTION!");
@@ -293,10 +344,10 @@ int main()
     // list->headDelete();
     // list->headDelete();
     // list->print();
-    // list->tailDelete();
+    list->tailDelete();
     // list->tailDelete();
     // printf("%d\n", list->isEmpty());
-    // list->print();
+    list->print();
     // list->tailDelete();
     // list->print();
     // printf("%d\n", list->isEmpty());
