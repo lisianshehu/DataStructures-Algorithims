@@ -81,8 +81,6 @@ void LinkedList::headInsert(int data)
     // will insert node at the beginning of linked list and update head
     newNode->next = head;
     head = newNode;
-    
-   
 }
 
 int LinkedList::headDelete()
